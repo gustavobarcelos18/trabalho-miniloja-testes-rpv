@@ -10,24 +10,40 @@ export default function Home() {
   const [submitted, setSubmitted] = useState(false)
 
   function handleAddToCart(productId: number) {
-    const product = products.find((p) => p.id === productId)
-    if (!product) return
+    const product = products.find((item) => item.id === productId)
 
-    setCartItems((prev) => {
-      const existing = prev.find((item) => item.product.id === productId)
-      if (existing) {
-        return prev.map((item) =>
-          item.product.id === productId
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
+    if (!product) {
+      return
+    }
+
+    const cartCopy = [...cartItems]
+    const itemIndex = cartCopy.findIndex((item) => item.product.id === productId)
+
+    if (itemIndex >= 0) {
+      cartCopy[itemIndex] = {
+        product: cartCopy[itemIndex].product,
+        quantity: cartCopy[itemIndex].quantity + 1,
       }
-      return [...prev, { product, quantity: 1 }]
-    })
+    } else {
+      cartCopy.push({
+        product: product,
+        quantity: 1,
+      })
+    }
+
+    setCartItems(cartCopy)
   }
 
   function handleRemove(productId: number) {
-    setCartItems((prev) => prev.filter((item) => item.product.id !== productId))
+    const newCart: CartItem[] = []
+
+    for (let i = 0; i < cartItems.length; i++) {
+      if (cartItems[i].product.id !== productId) {
+        newCart.push(cartItems[i])
+      }
+    }
+
+    setCartItems(newCart)
   }
 
   function handleCheckout(data: CheckoutData) {
@@ -36,16 +52,81 @@ export default function Home() {
   }
 
   if (submitted) {
-    return <h1>Pedido realizado com sucesso!</h1>
+    return (
+      <main
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '2rem',
+        }}
+      >
+        <div
+          style={{
+            width: '100%',
+            maxWidth: '520px',
+            backgroundColor: '#fffaf5',
+            border: '1px solid #e4d5c8',
+            borderRadius: '20px',
+            boxShadow: '0 14px 32px rgba(84, 53, 40, 0.08)',
+            padding: '2.5rem',
+            textAlign: 'center',
+          }}
+        >
+          <h1 style={{ marginTop: 0, marginBottom: '0.75rem' }}>
+            Pedido realizado com sucesso!
+          </h1>
+          <p style={{ margin: 0, color: '#7a665d', lineHeight: 1.6 }}>
+            Seu pedido foi enviado. Obrigado por comprar na Mini Loja.
+          </p>
+        </div>
+      </main>
+    )
   }
 
   return (
-    <main style={{ fontFamily: 'sans-serif', padding: '2rem', maxWidth: '960px', margin: '0 auto' }}>
-      <h1>Mini Loja</h1>
+    <main
+      style={{
+        padding: '2rem',
+        maxWidth: '1100px',
+        margin: '0 auto',
+        display: 'grid',
+        gap: '1.5rem',
+      }}
+    >
+      <section
+        style={{
+          backgroundColor: '#fffaf5',
+          border: '1px solid #e4d5c8',
+          borderRadius: '24px',
+          boxShadow: '0 14px 32px rgba(84, 53, 40, 0.08)',
+          padding: '2rem',
+        }}
+      >
+        <h1 style={{ margin: 0, fontSize: '2.3rem' }}>Mini Loja</h1>
+        <p style={{ marginTop: '0.75rem', marginBottom: 0, color: '#7a665d' }}>
+          Produtos simples, carrinho organizado e checkout direto ao ponto.
+        </p>
+      </section>
 
-      <section>
-        <h2>Produtos</h2>
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+      <section
+        style={{
+          backgroundColor: '#fffaf5',
+          border: '1px solid #e4d5c8',
+          borderRadius: '24px',
+          boxShadow: '0 14px 32px rgba(84, 53, 40, 0.08)',
+          padding: '2rem',
+        }}
+      >
+        <h2 style={{ marginTop: 0 }}>Produtos</h2>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '1rem',
+          }}
+        >
           {products.map((product) => (
             <ProductCard
               key={product.id}
@@ -56,17 +137,29 @@ export default function Home() {
         </div>
       </section>
 
-      <hr style={{ margin: '2rem 0' }} />
-
-      <section>
+      <section
+        style={{
+          backgroundColor: '#fffaf5',
+          border: '1px solid #e4d5c8',
+          borderRadius: '24px',
+          boxShadow: '0 14px 32px rgba(84, 53, 40, 0.08)',
+          padding: '2rem',
+        }}
+      >
         <Cart items={cartItems} onRemove={handleRemove} />
       </section>
 
-      <hr style={{ margin: '2rem 0' }} />
-
-      <section>
-        <h2>Finalizar Compra</h2>
-        <CheckoutForm onSubmit={handleCheckout} />
+      <section
+        style={{
+          backgroundColor: '#fffaf5',
+          border: '1px solid #e4d5c8',
+          borderRadius: '24px',
+          boxShadow: '0 14px 32px rgba(84, 53, 40, 0.08)',
+          padding: '2rem',
+        }}
+      >
+        <h2 style={{ marginTop: 0 }}>Finalizar Compra</h2>
+        <CheckoutForm onSubmit={handleCheckout} hasItems={cartItems.length > 0} />
       </section>
     </main>
   )

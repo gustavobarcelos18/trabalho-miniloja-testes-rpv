@@ -30,15 +30,49 @@ export const products: Product[] = [
   },
 ]
 
-// Produto em estoque — use nos testes do ProductCard
-export const mockProduct: Product = products[0]
+export const mockProduct: Product = {
+  id: products[0].id,
+  name: products[0].name,
+  price: products[0].price,
+  category: products[0].category,
+  image: products[0].image,
+  inStock: products[0].inStock,
+  description: products[0].description,
+}
 
-// Produto fora de estoque — use para testar o badge "Esgotado" e o botão desabilitado
-export const mockOutOfStockProduct: Product = products[2]
+export const mockOutOfStockProduct: Product = {
+  id: products[2].id,
+  name: products[2].name,
+  price: products[2].price,
+  category: products[2].category,
+  image: products[2].image,
+  inStock: products[2].inStock,
+  description: products[2].description,
+}
 
-// Itens de carrinho com 2 produtos
-// Total esperado: R$ 49,90 × 2 + R$ 199,90 × 1 = R$ 299,70
 export const mockCartItems: CartItem[] = [
-  { product: products[0], quantity: 2 },
-  { product: products[1], quantity: 1 },
+  {
+    product: {
+      id: products[0].id,
+      name: products[0].name,
+      price: products[0].price,
+      category: products[0].category,
+      image: products[0].image,
+      inStock: products[0].inStock,
+      description: products[0].description,
+    },
+    quantity: 2,
+  },
+  {
+    product: {
+      id: products[1].id,
+      name: products[1].name,
+      price: products[1].price,
+      category: products[1].category,
+      image: products[1].image,
+      inStock: products[1].inStock,
+      description: products[1].description,
+    },
+    quantity: 1,
+  },
 ]
